@@ -17,11 +17,11 @@ or run the app directly using your php interpreter if you have it installed.
 
 ## How to run it using docker
 - Initialize app:
-```sudo make install```
+```make install```
 - Run phpunit:
-```sudo make unit-test```
+```make unit-test```
 - Run app using a sample file `test.json` saved in folder `data\samples`:
-```sudo run test.json```
+```make run file=test.json```
 
 ## How to run it using your own php interpreter
 - Run phpunit:
