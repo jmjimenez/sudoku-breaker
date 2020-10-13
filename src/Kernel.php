@@ -1,4 +1,7 @@
-<?php
+<?php /** @noinspection ALL */
+/** @noinspection PhpUnused */
+
+/** @noinspection PhpDeprecationInspection */
 
 namespace App;
 
@@ -39,6 +42,7 @@ class Kernel extends BaseKernel
      * @param ContainerBuilder $container
      * @param LoaderInterface $loader
      * @throws Exception
+     * @noinspection PhpUnused
      */
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
