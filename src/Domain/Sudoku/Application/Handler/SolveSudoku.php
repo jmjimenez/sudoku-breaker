@@ -23,8 +23,9 @@ use App\Domain\Sudoku\ValueObject\Event\ClearTips;
 use App\Domain\Sudoku\ValueObject\Event\Event;
 use App\Domain\Sudoku\ValueObject\Event\SetContent;
 use App\Domain\Sudoku\ValueObject\Result;
+use Psr\Log\LoggerInterface;
 
-class SolveSudoku extends Entity
+class SolveSudoku
 {
     public const MAX_ITERATIONS = 30;
 
@@ -32,10 +33,15 @@ class SolveSudoku extends Entity
     private StrategiesLoader $strategiesLoader;
     private array $events = [];
     private bool $returnSteps;
+    private ?LoggerInterface $logger;
 
     public function __construct(
-        StrategiesLoader $strategiesLoader
+        StrategiesLoader $strategiesLoader,
+        ?LoggerInterface $logger = null
     ) {
+        if ($logger !== null) {
+           $this->logger = $logger;
+        }
         $this->strategiesLoader = $strategiesLoader;
         $this->board = new Board();
     }
@@ -125,5 +131,34 @@ class SolveSudoku extends Entity
             default:
                 break;
         }
+    }
+
+    protected function logger(): LoggerInterface
+    {
+        if (isset($this->logger)) {
+            return $this->logger;
+        }
+
+        $this->logger = new class implements LoggerInterface {
+            public function emergency($message, array $context = array()) { }
+
+            public function alert($message, array $context = array()) { }
+
+            public function critical($message, array $context = array()) { }
+
+            public function error($message, array $context = array()) { }
+
+            public function warning($message, array $context = array()) { }
+
+            public function notice($message, array $context = array()) { }
+
+            public function info($message, array $context = array()) { }
+
+            public function debug($message, array $context = array()) { }
+
+            public function log($level, $message, array $context = array()) { }
+        };
+
+        return $this->logger;
     }
 }

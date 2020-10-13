@@ -7,7 +7,6 @@ use App\Domain\Sudoku\Application\Handler\Exception\NotValidSudoku;
 use App\Domain\Sudoku\Application\Handler\Exception\SudokuAlreadyCompleted;
 use App\Domain\Sudoku\Application\Handler\SolveSudoku as SolveSudokuHandler;
 use App\Domain\Sudoku\Application\SolveSudoku as SolveSudokuPayload;
-use App\Domain\Sudoku\Entity\Entity;
 use App\Infrastructure\Domain\Sudoku\Strategy\StrategiesLoaderHardcoded;
 use App\Infrastructure\Exception\ErrorDecodingJsonData;
 use App\Infrastructure\Exception\ErrorReadingFile;
@@ -74,7 +73,6 @@ class SolveSudoku extends Command
     {
         try {
             $this->logger = $this->loggerFactory->getLogger($output);
-            Entity::setLogger($this->logger);
 
             $this->logger->info('Sudoku started');
 
@@ -83,7 +81,7 @@ class SolveSudoku extends Command
             $maxIterations = (int) $input->getOption('max_iterations');
 
             $payload = new SolveSudokuPayload($data, $maxIterations, $returnSteps);
-            $handler = new SolveSudokuHandler(new StrategiesLoaderHardcoded());
+            $handler = new SolveSudokuHandler(new StrategiesLoaderHardcoded(), $this->logger);
             $result = $handler->execute($payload);
             $this->resultPrinter->print($output, $this->resultFormatter->format($result, $returnSteps) );
         } catch (NotPossibleToSolve $exception) {
