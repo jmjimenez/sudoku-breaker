@@ -11,6 +11,8 @@ to the sudoku until it is solved, or the app finds it is out of options (see par
 At this current stage is a console app. So you can use the integrated docker commands
 or run the app directly using your php interpreter if you have it installed.
 
+You can read a bit more in [my personal blog](http://jmjg.es)
+
 ##Requirements
 - Docker
 - make
