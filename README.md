@@ -35,6 +35,8 @@ This console command have several additional options available:
  * `--max_iterations=NNN` will limit the number of iterations to do before leaving the sudoku for unsolved
  * `--return_steps` will return the list of performed steps with the response
  
+ When the sudoku is more complex, I have needed to increase the default number of iterations.
+ 
  ## Sudoku data files
  They are simple json. They must have the following format:
 ```

@@ -27,7 +27,7 @@ use Psr\Log\LoggerInterface;
 
 class SolveSudoku
 {
-    public const MAX_ITERATIONS = 30;
+    public const MAX_ITERATIONS = 60;
 
     private Board $board;
     private StrategiesLoader $strategiesLoader;
