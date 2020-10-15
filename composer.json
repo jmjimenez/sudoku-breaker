@@ -17,6 +17,8 @@
         "ext-json": "*"
     },
     "require-dev": {
+        "phpmd/phpmd": "@stable",
+        "squizlabs/php_codesniffer": "*"
     },
     "config": {
         "optimize-autoloader": true,

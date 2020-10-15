@@ -23,3 +23,8 @@
 ###> tests directory ###
 /tests/scripts
 ###< tests directory ###
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###
