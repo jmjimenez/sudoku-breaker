@@ -1,0 +1,20 @@
+{
+    "source": {
+        "directories": [
+            "src",
+            "tests"
+        ],
+        "excludes": [
+            "Unit",
+            "scripts",
+            "bootstrap.php",
+            "Kernel.php"
+        ]
+    },
+    "logs": {
+        "text": "infection.log"
+    },
+    "mutators": {
+        "@default": true
+    }
+}

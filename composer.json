@@ -17,6 +17,7 @@
         "ext-json": "*"
     },
     "require-dev": {
+        "infection/infection": "^0.17.7",
         "phpmd/phpmd": "@stable",
         "squizlabs/php_codesniffer": "*"
     },

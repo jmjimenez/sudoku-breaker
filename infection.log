@@ -1,0 +1,2893 @@
+Escaped mutants:
+================
+
+1) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Application/Handler/SolveSudoku.php:42    [M] NotIdentical
+
+--- Original
++++ New
+@@ @@
+     private ?LoggerInterface $logger;
+     public function __construct(StrategiesLoader $strategiesLoader, ?LoggerInterface $logger = null)
+     {
+-        if ($logger !== null) {
++        if ($logger === null) {
+             $this->logger = $logger;
+         }
+         $this->strategiesLoader = $strategiesLoader;
+
+
+2) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Application/Handler/SolveSudoku.php:78    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+         Entity::subscribe(function (Event $event) {
+             $this->recordEvent($event);
+         });
+-        $iterations = 1;
++        $iterations = 0;
+         while ($iterations <= $game->maxIterations()) {
+             $this->logger()->debug(sprintf('Iteration #%s', $iterations));
+             foreach ($strategies as $strategy) {
+
+
+3) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Application/Handler/SolveSudoku.php:80    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+         });
+         $iterations = 1;
+         while ($iterations <= $game->maxIterations()) {
+-            $this->logger()->debug(sprintf('Iteration #%s', $iterations));
++            
+             foreach ($strategies as $strategy) {
+                 if ($strategy->execute($this->board)) {
+                     $this->logger()->debug(sprintf('Strategy %s succeded', get_class($strategy)));
+
+
+4) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Application/Handler/SolveSudoku.php:84    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+             $this->logger()->debug(sprintf('Iteration #%s', $iterations));
+             foreach ($strategies as $strategy) {
+                 if ($strategy->execute($this->board)) {
+-                    $this->logger()->debug(sprintf('Strategy %s succeded', get_class($strategy)));
++                    
+                     $status = $this->board->status();
+                     if (!$status->isValid()) {
+                         throw new ReachedInvalidStatus();
+
+
+5) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Application/Handler/SolveSudoku.php:124    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+                         break;
+                 }
+                 $message = sprintf("%s: add %s %s", $event->position(), $contentType, $event->content()->value());
+-                $this->logger()->debug($message);
++                
+                 if ($this->returnSteps) {
+                     $this->events[] = $message;
+                 }
+
+
+6) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Application/Handler/SolveSudoku.php:136    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+                 break;
+         }
+     }
+-    protected function logger() : LoggerInterface
++    private function logger() : LoggerInterface
+     {
+         if (isset($this->logger)) {
+             return $this->logger;
+
+
+7) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:132    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+      */
+     public function content(int $row, int $col) : CellContent
+     {
+-        $this->checkRow($row);
++        
+         $this->checkColumn($col);
+         return $this->cells[$row][$col]->content();
+     }
+
+
+8) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:133    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+     public function content(int $row, int $col) : CellContent
+     {
+         $this->checkRow($row);
+-        $this->checkColumn($col);
++        
+         return $this->cells[$row][$col]->content();
+     }
+     /**
+
+
+9) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:214    [M] Foreach_
+
+--- Original
++++ New
+@@ @@
+     }
+     private function isValid() : bool
+     {
+-        foreach ($this->rows() as $row) {
++        foreach (array() as $row) {
+             if (!$row->isValid()) {
+                 return false;
+             }
+
+
+10) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:220    [M] Foreach_
+
+--- Original
++++ New
+@@ @@
+                 return false;
+             }
+         }
+-        foreach ($this->columns() as $column) {
++        foreach (array() as $column) {
+             if (!$column->isValid()) {
+                 return false;
+             }
+
+
+11) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:237    [M] Foreach_
+
+--- Original
++++ New
+@@ @@
+     }
+     private function isCompleted() : bool
+     {
+-        foreach ($this->rows() as $row) {
++        foreach (array() as $row) {
+             if (!$row->isCompleted()) {
+                 return false;
+             }
+
+
+12) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:243    [M] Foreach_
+
+--- Original
++++ New
+@@ @@
+                 return false;
+             }
+         }
+-        foreach ($this->columns() as $column) {
++        foreach (array() as $column) {
+             if (!$column->isCompleted()) {
+                 return false;
+             }
+
+
+13) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:249    [M] Foreach_
+
+--- Original
++++ New
+@@ @@
+                 return false;
+             }
+         }
+-        foreach ($this->squares() as $square) {
++        foreach (array() as $square) {
+             if (!$square->isCompleted()) {
+                 return false;
+             }
+
+
+14) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:262    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+     private function initializeCells() : void
+     {
+         $this->cells = [];
+-        for ($i = 1; $i <= 9; $i++) {
++        for ($i = 0; $i <= 9; $i++) {
+             $this->cells[$i] = [];
+             for ($j = 1; $j <= 9; $j++) {
+                 $this->cells[$i][$j] = new Cell(new Nothing());
+
+
+15) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:307    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     private function initializeSquares() : void
+     {
+         $this->squares = [];
+-        $this->squares[1] = $this->createSquare(1, 1, 3, 1, 3);
++        $this->squares[1] = $this->createSquare(2, 1, 3, 1, 3);
+         $this->squares[2] = $this->createSquare(2, 1, 3, 4, 6);
+         $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+
+
+16) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:307    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+     private function initializeSquares() : void
+     {
+         $this->squares = [];
+-        $this->squares[1] = $this->createSquare(1, 1, 3, 1, 3);
++        $this->squares[0] = $this->createSquare(1, 1, 3, 1, 3);
+         $this->squares[2] = $this->createSquare(2, 1, 3, 4, 6);
+         $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+
+
+17) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:307    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+     private function initializeSquares() : void
+     {
+         $this->squares = [];
+-        $this->squares[1] = $this->createSquare(1, 1, 3, 1, 3);
++        $this->squares[1] = $this->createSquare(0, 1, 3, 1, 3);
+         $this->squares[2] = $this->createSquare(2, 1, 3, 4, 6);
+         $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+
+
+18) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:308    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     {
+         $this->squares = [];
+         $this->squares[1] = $this->createSquare(1, 1, 3, 1, 3);
+-        $this->squares[2] = $this->createSquare(2, 1, 3, 4, 6);
++        $this->squares[2] = $this->createSquare(3, 1, 3, 4, 6);
+         $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+         $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
+
+
+19) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:308    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     {
+         $this->squares = [];
+         $this->squares[1] = $this->createSquare(1, 1, 3, 1, 3);
+-        $this->squares[2] = $this->createSquare(2, 1, 3, 4, 6);
++        $this->squares[2] = $this->createSquare(1, 1, 3, 4, 6);
+         $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+         $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
+
+
+20) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:309    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares = [];
+         $this->squares[1] = $this->createSquare(1, 1, 3, 1, 3);
+         $this->squares[2] = $this->createSquare(2, 1, 3, 4, 6);
+-        $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
++        $this->squares[3] = $this->createSquare(2, 1, 3, 7, 9);
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+         $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+
+
+21) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:309    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares = [];
+         $this->squares[1] = $this->createSquare(1, 1, 3, 1, 3);
+         $this->squares[2] = $this->createSquare(2, 1, 3, 4, 6);
+-        $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
++        $this->squares[3] = $this->createSquare(4, 1, 3, 7, 9);
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+         $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+
+
+22) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:311    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[1] = $this->createSquare(1, 1, 3, 1, 3);
+         $this->squares[2] = $this->createSquare(2, 1, 3, 4, 6);
+         $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
+-        $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
++        $this->squares[4] = $this->createSquare(3, 4, 6, 1, 3);
+         $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+         $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
+
+
+23) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:311    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[1] = $this->createSquare(1, 1, 3, 1, 3);
+         $this->squares[2] = $this->createSquare(2, 1, 3, 4, 6);
+         $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
+-        $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
++        $this->squares[4] = $this->createSquare(5, 4, 6, 1, 3);
+         $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+         $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
+
+
+24) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:312    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[2] = $this->createSquare(2, 1, 3, 4, 6);
+         $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+-        $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
++        $this->squares[5] = $this->createSquare(4, 4, 6, 4, 6);
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+         $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
+         $this->squares[8] = $this->createSquare(8, 7, 9, 4, 6);
+
+
+25) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:312    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[2] = $this->createSquare(2, 1, 3, 4, 6);
+         $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+-        $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
++        $this->squares[5] = $this->createSquare(6, 4, 6, 4, 6);
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+         $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
+         $this->squares[8] = $this->createSquare(8, 7, 9, 4, 6);
+
+
+26) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:313    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+         $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
+-        $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
++        $this->squares[6] = $this->createSquare(5, 4, 6, 7, 9);
+         $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
+         $this->squares[8] = $this->createSquare(8, 7, 9, 4, 6);
+         $this->squares[9] = $this->createSquare(9, 7, 9, 7, 9);
+
+
+27) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:313    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[3] = $this->createSquare(3, 1, 3, 7, 9);
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+         $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
+-        $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
++        $this->squares[6] = $this->createSquare(7, 4, 6, 7, 9);
+         $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
+         $this->squares[8] = $this->createSquare(8, 7, 9, 4, 6);
+         $this->squares[9] = $this->createSquare(9, 7, 9, 7, 9);
+
+
+28) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:315    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+         $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+-        $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
++        $this->squares[7] = $this->createSquare(6, 7, 9, 1, 3);
+         $this->squares[8] = $this->createSquare(8, 7, 9, 4, 6);
+         $this->squares[9] = $this->createSquare(9, 7, 9, 7, 9);
+     }
+
+
+29) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:315    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[4] = $this->createSquare(4, 4, 6, 1, 3);
+         $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+-        $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
++        $this->squares[7] = $this->createSquare(8, 7, 9, 1, 3);
+         $this->squares[8] = $this->createSquare(8, 7, 9, 4, 6);
+         $this->squares[9] = $this->createSquare(9, 7, 9, 7, 9);
+     }
+
+
+30) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:316    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+         $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
+-        $this->squares[8] = $this->createSquare(8, 7, 9, 4, 6);
++        $this->squares[8] = $this->createSquare(7, 7, 9, 4, 6);
+         $this->squares[9] = $this->createSquare(9, 7, 9, 7, 9);
+     }
+     private function createSquare(int $squareNumber, int $fromRow, int $toRow, int $fromColumn, int $toColumn) : Square
+
+
+31) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:316    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[5] = $this->createSquare(5, 4, 6, 4, 6);
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+         $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
+-        $this->squares[8] = $this->createSquare(8, 7, 9, 4, 6);
++        $this->squares[8] = $this->createSquare(9, 7, 9, 4, 6);
+         $this->squares[9] = $this->createSquare(9, 7, 9, 7, 9);
+     }
+     private function createSquare(int $squareNumber, int $fromRow, int $toRow, int $fromColumn, int $toColumn) : Square
+
+
+32) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:317    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+         $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
+         $this->squares[8] = $this->createSquare(8, 7, 9, 4, 6);
+-        $this->squares[9] = $this->createSquare(9, 7, 9, 7, 9);
++        $this->squares[10] = $this->createSquare(9, 7, 9, 7, 9);
+     }
+     private function createSquare(int $squareNumber, int $fromRow, int $toRow, int $fromColumn, int $toColumn) : Square
+     {
+
+
+33) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:317    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+         $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
+         $this->squares[8] = $this->createSquare(8, 7, 9, 4, 6);
+-        $this->squares[9] = $this->createSquare(9, 7, 9, 7, 9);
++        $this->squares[9] = $this->createSquare(8, 7, 9, 7, 9);
+     }
+     private function createSquare(int $squareNumber, int $fromRow, int $toRow, int $fromColumn, int $toColumn) : Square
+     {
+
+
+34) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:317    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+         $this->squares[6] = $this->createSquare(6, 4, 6, 7, 9);
+         $this->squares[7] = $this->createSquare(7, 7, 9, 1, 3);
+         $this->squares[8] = $this->createSquare(8, 7, 9, 4, 6);
+-        $this->squares[9] = $this->createSquare(9, 7, 9, 7, 9);
++        $this->squares[9] = $this->createSquare(10, 7, 9, 7, 9);
+     }
+     private function createSquare(int $squareNumber, int $fromRow, int $toRow, int $fromColumn, int $toColumn) : Square
+     {
+
+
+35) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Cell.php:80    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+         if ($this->value()) {
+             $this->tips = [];
+         }
+-        $this->publish(new SetContent($this->position(), $content));
++        
+     }
+     public function content() : CellContent
+     {
+
+
+36) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Cell.php:113    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+      */
+     public function setTied(int ...$ties)
+     {
+-        $this->checkTipIsAllowed();
++        
+         $this->setContent(new Tied(...$ties));
+         $this->clearTips();
+         foreach ($ties as $tie) {
+
+
+37) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Cell.php:116    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+     {
+         $this->checkTipIsAllowed();
+         $this->setContent(new Tied(...$ties));
+-        $this->clearTips();
++        
+         foreach ($ties as $tie) {
+             $this->addTip($tie);
+         }
+
+
+38) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Cell.php:124    [M] InstanceOf_
+
+--- Original
++++ New
+@@ @@
+     }
+     public function isTied() : bool
+     {
+-        return $this->content instanceof Tied;
++        return false;
+     }
+     public function ties() : array
+     {
+
+
+39) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Cell.php:151    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+         $this->checkTipIsAllowed();
+         $this->tips[] = $digit;
+         sort($this->tips);
+-        $this->publish(new AddTip($this->position(), $digit));
++        
+     }
+     /**
+      * @param int|null $digit
+
+
+40) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Cell.php:161    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+      */
+     public function clearTips(?int $digit = null) : void
+     {
+-        $this->checkTipIsAllowed();
++        
+         //TODO: if a tip is cleared, then check if there is a linked Tied
+         $tips = [];
+         if ($digit !== null) {
+
+
+41) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Cell.php:177    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+             }
+         }
+         $this->tips = $tips;
+-        $this->publish(new ClearTips($this->position(), $digit));
++        
+     }
+     /**
+      * @param int $digit
+
+
+42) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Cell.php:187    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+      */
+     public function findTip(int $digit) : bool
+     {
+-        $this->checkTipIsAllowed();
++        
+         return array_search($digit, $this->tips) !== false;
+     }
+     /**
+
+
+43) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Cell.php:197    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+      */
+     public function tips() : array
+     {
+-        $this->checkTipIsAllowed();
++        
+         return $this->tips;
+     }
+     public function isTipAllowed() : bool
+
+
+44) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Entity.php:11    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+ abstract class Entity
+ {
+     private static ?EventBus $eventBus;
+-    public static function eventBus() : EventBus
++    protected static function eventBus() : EventBus
+     {
+         if (!isset(self::$eventBus)) {
+             self::$eventBus = new EventBus();
+
+
+45) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Entity.php:22    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+     }
+     protected function publish(Event $event) : void
+     {
+-        self::eventBus()->publish($event);
++        
+     }
+     public static function subscribe(callable $subscriptor) : void
+     {
+
+
+46) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Entity.php:27    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+     }
+     public static function subscribe(callable $subscriptor) : void
+     {
+-        self::eventBus()->subscribe($subscriptor);
++        
+     }
+ }
+
+
+47) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/OneDimensionMatrix.php:23    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     {
+         $this->number = $number;
+         $this->cells = [];
+-        for ($i = 1; $i <= 9; $i++) {
++        for ($i = 2; $i <= 9; $i++) {
+             $this->cells[$i] = null;
+         }
+     }
+
+
+48) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/OneDimensionMatrix.php:23    [M] LessThanOrEqualTo
+
+--- Original
++++ New
+@@ @@
+     {
+         $this->number = $number;
+         $this->cells = [];
+-        for ($i = 1; $i <= 9; $i++) {
++        for ($i = 1; $i < 9; $i++) {
+             $this->cells[$i] = null;
+         }
+     }
+
+
+49) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/OneDimensionMatrix.php:23    [M] LessThanOrEqualToNegotiation
+
+--- Original
++++ New
+@@ @@
+     {
+         $this->number = $number;
+         $this->cells = [];
+-        for ($i = 1; $i <= 9; $i++) {
++        for ($i = 1; $i > 9; $i++) {
+             $this->cells[$i] = null;
+         }
+     }
+
+
+50) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/OneDimensionMatrix.php:23    [M] For_
+
+--- Original
++++ New
+@@ @@
+     {
+         $this->number = $number;
+         $this->cells = [];
+-        for ($i = 1; $i <= 9; $i++) {
++        for ($i = 1; false; $i++) {
+             $this->cells[$i] = null;
+         }
+     }
+
+
+51) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/OneDimensionMatrix.php:61    [M] TrueValue
+
+--- Original
++++ New
+@@ @@
+                 if (isset($values[$content->value()])) {
+                     return false;
+                 }
+-                $values[$content->value()] = true;
++                $values[$content->value()] = false;
+             }
+         }
+         return true;
+
+
+52) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/OneDimensionMatrix.php:77    [M] TrueValue
+
+--- Original
++++ New
+@@ @@
+             if ($content->value() === null) {
+                 return false;
+             }
+-            $values[$content->value()] = true;
++            $values[$content->value()] = false;
+         }
+         return count($values) === 9;
+     }
+
+
+53) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:22    [M] ArrayItemRemoval
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+54) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:23    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [2 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+55) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:23    [M] ArrayItemRemoval
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+56) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:24    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [2 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+57) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:24    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 1 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+58) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:24    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 2 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+59) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:24    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 3 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+60) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:26    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 1 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+61) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:26    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+62) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:26    [M] ArrayItemRemoval
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+63) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:27    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [2 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+64) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:27    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 1 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+65) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:27    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 2 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+66) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:27    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 3 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+67) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:29    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+68) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:29    [M] ArrayItemRemoval
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+69) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:30    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [2 => null, 2 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+70) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:30    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 1 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+71) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:30    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 3 => null, 3 => null]];
+     }
+     public function number() : int
+     {
+
+
+72) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:30    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $number)
+     {
+         $this->number = $number;
+-        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 3 => null]];
++        $this->cells = [1 => [1 => null, 2 => null, 3 => null], 2 => [1 => null, 2 => null, 3 => null], 3 => [1 => null, 2 => null, 2 => null]];
+     }
+     public function number() : int
+     {
+
+
+73) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:92    [M] LessThanOrEqualTo
+
+--- Original
++++ New
+@@ @@
+     {
+         $missingValues = [];
+         $values = $this->values();
+-        for ($i = 1; $i <= 9; $i++) {
++        for ($i = 1; $i < 9; $i++) {
+             if (!isset($values[$i])) {
+                 $missingValues[] = $i;
+             }
+
+
+74) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:133    [M] TrueValue
+
+--- Original
++++ New
+@@ @@
+                     if (isset($values[$content->value()])) {
+                         return false;
+                     }
+-                    $values[$content->value()] = true;
++                    $values[$content->value()] = false;
+                 }
+             }
+         }
+
+
+75) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Square.php:151    [M] TrueValue
+
+--- Original
++++ New
+@@ @@
+                 if ($content->value() === null) {
+                     return false;
+                 }
+-                $values[$content->value()] = true;
++                $values[$content->value()] = false;
+             }
+         }
+         return count($values) === 9;
+
+
+76) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Exception/InvalidColumnValue.php:13    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $column)
+     {
+         $this->column = $column;
+-        parent::__construct();
++        
+     }
+ }
+
+
+77) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Exception/InvalidPosition.php:15    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+     {
+         $this->row = $row;
+         $this->column = $column;
+-        parent::__construct();
++        
+     }
+ }
+
+
+78) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Exception/InvalidRowValue.php:13    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $row)
+     {
+         $this->row = $row;
+-        parent::__construct();
++        
+     }
+ }
+
+
+79) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Exception/InvalidValue.php:13    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+     public function __construct(int $value)
+     {
+         $this->value = $value;
+-        parent::__construct();
++        
+     }
+ }
+
+
+80) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillDigitsInSquares.php:30    [M] TrueValue
+
+--- Original
++++ New
+@@ @@
+     {
+         foreach ($board->squares() as $square) {
+             if ($this->fillDigitsInSquare($square)) {
+-                return true;
++                return false;
+             }
+         }
+         return false;
+
+
+81) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastCellInColumns.php:34    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+      * @return bool
+      * @throws InvalidPosition
+      */
+-    public function fillLastCellInColumn(Column $column) : bool
++    protected function fillLastCellInColumn(Column $column) : bool
+     {
+         return $this->fillLastCellInSet($column);
+     }
+ }
+
+
+82) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastCellInSquares.php:37    [M] LessThanOrEqualTo
+
+--- Original
++++ New
+@@ @@
+     private function fillLastCellInSquare(Square $square) : bool
+     {
+         $missingValues = $square->missingValues();
+-        for ($i = 1; $i <= 3; $i++) {
++        for ($i = 1; $i < 3; $i++) {
+             for ($j = 1; $j <= 3; $j++) {
+                 if ($square->content($i, $j)->value() === null) {
+                     $square->setFound($i, $j, $missingValues[0]);
+
+
+83) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastDigitInBoard.php:23    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+      */
+     public function execute(Board $board) : bool
+     {
+-        for ($i = 1; $i <= 9; $i++) {
++        for ($i = 0; $i <= 9; $i++) {
+             if ($board->countDigit($i) == 8) {
+                 return $this->fillLastDigit($board, $i);
+             }
+
+
+84) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastDigitInBoard.php:23    [M] LessThanOrEqualTo
+
+--- Original
++++ New
+@@ @@
+      */
+     public function execute(Board $board) : bool
+     {
+-        for ($i = 1; $i <= 9; $i++) {
++        for ($i = 1; $i < 9; $i++) {
+             if ($board->countDigit($i) == 8) {
+                 return $this->fillLastDigit($board, $i);
+             }
+
+
+85) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastDigitInBoard.php:48    [M] Break_
+
+--- Original
++++ New
+@@ @@
+         foreach ($board->rows() as $row) {
+             if ($row->findDigit($digit) === null) {
+                 $rowNumber = $row->number();
+-                break;
++                continue;
+             }
+         }
+         foreach ($board->columns() as $column) {
+
+
+86) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastDigitInBoard.php:58    [M] LogicalOr
+
+--- Original
++++ New
+@@ @@
+                 $colNumber = $column->number();
+             }
+         }
+-        if ($rowNumber === null || $colNumber === null) {
++        if ($rowNumber === null && $colNumber === null) {
+             return false;
+         }
+         $board->setFound($rowNumber, $colNumber, $digit);
+
+
+87) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FindCellsTiedByTips.php:27    [M] Foreach_
+
+--- Original
++++ New
+@@ @@
+      */
+     public function execute(Board $board) : bool
+     {
+-        foreach ($board->squares() as $square) {
++        foreach (array() as $square) {
+             if ($this->findCellsTiedByTipsInSquare->execute($square)) {
+                 return true;
+             }
+
+
+88) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FindCellsTiedByTips.php:33    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+                 return true;
+             }
+         }
+-        return false;
++        return true;
+     }
+ }
+
+
+89) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FillDigitInSquare.php:50    [M] GreaterThanOrEqualTo
+
+--- Original
++++ New
+@@ @@
+             $possibleCells[0]->setContent(new Found($digit));
+             return true;
+         }
+-        if (count($possibleCells) >= 2) {
++        if (count($possibleCells) > 2) {
+             /** @var Cell $cell */
+             foreach ($possibleCells as $cell) {
+                 $cell->addTip($digit);
+
+
+90) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:21    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+     {
+         foreach ($square->cellsAsSingleArray() as $cell) {
+             if ($cell->value() !== null) {
+-                return false;
++                return true;
+             }
+             $tips = $cell->tips();
+             $position = $cell->position();
+
+
+91) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:27    [M] LessThan
+
+--- Original
++++ New
+@@ @@
+             }
+             $tips = $cell->tips();
+             $position = $cell->position();
+-            if (count($tips) < 2) {
++            if (count($tips) <= 2) {
+                 return false;
+             }
+             foreach ($square->cellsAsSingleArray() as $otherCell) {
+
+
+92) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:28    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+             $tips = $cell->tips();
+             $position = $cell->position();
+             if (count($tips) < 2) {
+-                return false;
++                return true;
+             }
+             foreach ($square->cellsAsSingleArray() as $otherCell) {
+                 if ($otherCell->position() === $position) {
+
+
+93) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:37    [M] Continue_
+
+--- Original
++++ New
+@@ @@
+                     continue;
+                 }
+                 if ($otherCell->value() !== null) {
+-                    continue;
++                    break;
+                 }
+                 if (count($otherCell->tips()) < 2) {
+                     continue;
+
+
+94) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:40    [M] LessThan
+
+--- Original
++++ New
+@@ @@
+                 if ($otherCell->value() !== null) {
+                     continue;
+                 }
+-                if (count($otherCell->tips()) < 2) {
++                if (count($otherCell->tips()) <= 2) {
+                     continue;
+                 }
+                 $tipsMatches = $this->findTipsMatches($tips, $otherCell->tips());
+
+
+95) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:41    [M] Continue_
+
+--- Original
++++ New
+@@ @@
+                     continue;
+                 }
+                 if (count($otherCell->tips()) < 2) {
+-                    continue;
++                    break;
+                 }
+                 $tipsMatches = $this->findTipsMatches($tips, $otherCell->tips());
+                 if (count($tipsMatches) == 0) {
+
+
+96) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:46    [M] Continue_
+
+--- Original
++++ New
+@@ @@
+                 }
+                 $tipsMatches = $this->findTipsMatches($tips, $otherCell->tips());
+                 if (count($tipsMatches) == 0) {
+-                    continue;
++                    break;
+                 }
+                 foreach ($tipsMatches as $tipsMatch) {
+                     if ($this->isValidTipMatchForSquare($tipsMatch, $square, [$position, $otherCell->position()])) {
+
+
+97) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:64    [M] UnwrapArrayIntersect
+
+--- Original
++++ New
+@@ @@
+     }
+     private function findTipsMatches(array $tipsA, array $tipsB) : array
+     {
+-        $matches = array_intersect($tipsA, $tipsB);
++        $matches = $tipsB;
+         if (count($matches) < 2) {
+             return [];
+         }
+
+
+98) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:70    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+         if (count($matches) < 2) {
+             return [];
+         }
+-        if (count($matches) == 2) {
++        if (count($matches) == 1) {
+             return [$matches];
+         }
+         $matches = array_values($matches);
+
+
+99) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:70    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+         if (count($matches) < 2) {
+             return [];
+         }
+-        if (count($matches) == 2) {
++        if (count($matches) == 3) {
+             return [$matches];
+         }
+         $matches = array_values($matches);
+
+
+100) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:70    [M] Equal
+
+--- Original
++++ New
+@@ @@
+         if (count($matches) < 2) {
+             return [];
+         }
+-        if (count($matches) == 2) {
++        if (count($matches) != 2) {
+             return [$matches];
+         }
+         $matches = array_values($matches);
+
+
+101) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:74    [M] UnwrapArrayValues
+
+--- Original
++++ New
+@@ @@
+         if (count($matches) == 2) {
+             return [$matches];
+         }
+-        $matches = array_values($matches);
++        $matches = $matches;
+         $tipMatches = [];
+         for ($i = 0; $i < count($matches); $i++) {
+             for ($j = $i + 1; $j < count($matches); $j++) {
+
+
+102) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:78    [M] For_
+
+--- Original
++++ New
+@@ @@
+         }
+         $matches = array_values($matches);
+         $tipMatches = [];
+-        for ($i = 0; $i < count($matches); $i++) {
++        for ($i = 0; false; $i++) {
+             for ($j = $i + 1; $j < count($matches); $j++) {
+                 $tipMatches[] = [$matches[$i], $matches[$j]];
+             }
+
+
+103) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:78    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+         }
+         $matches = array_values($matches);
+         $tipMatches = [];
+-        for ($i = 0; $i < count($matches); $i++) {
++        for ($i = 1; $i < count($matches); $i++) {
+             for ($j = $i + 1; $j < count($matches); $j++) {
+                 $tipMatches[] = [$matches[$i], $matches[$j]];
+             }
+
+
+104) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:78    [M] LessThan
+
+--- Original
++++ New
+@@ @@
+         }
+         $matches = array_values($matches);
+         $tipMatches = [];
+-        for ($i = 0; $i < count($matches); $i++) {
++        for ($i = 0; $i <= count($matches); $i++) {
+             for ($j = $i + 1; $j < count($matches); $j++) {
+                 $tipMatches[] = [$matches[$i], $matches[$j]];
+             }
+
+
+105) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:78    [M] LessThanNegotiation
+
+--- Original
++++ New
+@@ @@
+         }
+         $matches = array_values($matches);
+         $tipMatches = [];
+-        for ($i = 0; $i < count($matches); $i++) {
++        for ($i = 0; $i >= count($matches); $i++) {
+             for ($j = $i + 1; $j < count($matches); $j++) {
+                 $tipMatches[] = [$matches[$i], $matches[$j]];
+             }
+
+
+106) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:79    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+         $matches = array_values($matches);
+         $tipMatches = [];
+         for ($i = 0; $i < count($matches); $i++) {
+-            for ($j = $i + 1; $j < count($matches); $j++) {
++            for ($j = $i + 2; $j < count($matches); $j++) {
+                 $tipMatches[] = [$matches[$i], $matches[$j]];
+             }
+         }
+
+
+107) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:79    [M] For_
+
+--- Original
++++ New
+@@ @@
+         $matches = array_values($matches);
+         $tipMatches = [];
+         for ($i = 0; $i < count($matches); $i++) {
+-            for ($j = $i + 1; $j < count($matches); $j++) {
++            for ($j = $i + 1; false; $j++) {
+                 $tipMatches[] = [$matches[$i], $matches[$j]];
+             }
+         }
+
+
+108) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:84    [M] ArrayOneItem
+
+--- Original
++++ New
+@@ @@
+                 $tipMatches[] = [$matches[$i], $matches[$j]];
+             }
+         }
+-        return $tipMatches;
++        return count($tipMatches) > 1 ? array_slice($tipMatches, 0, 1, true) : $tipMatches;
+     }
+     /**
+      * @param array $tips
+
+
+109) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:106    [M] UnwrapArrayIntersect
+
+--- Original
++++ New
+@@ @@
+             if ($cell->value() !== null) {
+                 continue;
+             }
+-            if (count(array_intersect($tips, $cell->tips())) !== 0) {
++            if (count($cell->tips()) !== 0) {
+                 return false;
+             }
+         }
+
+
+110) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/IsDigitTipInOneDimensionMatrix.php:18    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+      * @return bool
+      * @throws InvalidPosition
+      */
+-    public function execute(int $digit, $oneDimensionMatrix) : bool
++    protected function execute(int $digit, $oneDimensionMatrix) : bool
+     {
+         $cells = $oneDimensionMatrix->cells();
+         return $this->findDigitTipInCells($digit, $cells[1], $cells[2], $cells[3]) || $this->findDigitTipInCells($digit, $cells[4], $cells[5], $cells[6]) || $this->findDigitTipInCells($digit, $cells[7], $cells[8], $cells[9]);
+
+
+111) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/IsDigitTipInOneDimensionMatrix.php:23    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function execute(int $digit, $oneDimensionMatrix) : bool
+     {
+         $cells = $oneDimensionMatrix->cells();
+-        return $this->findDigitTipInCells($digit, $cells[1], $cells[2], $cells[3]) || $this->findDigitTipInCells($digit, $cells[4], $cells[5], $cells[6]) || $this->findDigitTipInCells($digit, $cells[7], $cells[8], $cells[9]);
++        return $this->findDigitTipInCells($digit, $cells[1], $cells[2], $cells[3]) || $this->findDigitTipInCells($digit, $cells[3], $cells[5], $cells[6]) || $this->findDigitTipInCells($digit, $cells[7], $cells[8], $cells[9]);
+     }
+     /**
+      * @param int $digit
+
+
+112) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/IsDigitTipInOneDimensionMatrix.php:23    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function execute(int $digit, $oneDimensionMatrix) : bool
+     {
+         $cells = $oneDimensionMatrix->cells();
+-        return $this->findDigitTipInCells($digit, $cells[1], $cells[2], $cells[3]) || $this->findDigitTipInCells($digit, $cells[4], $cells[5], $cells[6]) || $this->findDigitTipInCells($digit, $cells[7], $cells[8], $cells[9]);
++        return $this->findDigitTipInCells($digit, $cells[1], $cells[2], $cells[3]) || $this->findDigitTipInCells($digit, $cells[5], $cells[5], $cells[6]) || $this->findDigitTipInCells($digit, $cells[7], $cells[8], $cells[9]);
+     }
+     /**
+      * @param int $digit
+
+
+113) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/IsDigitTipInOneDimensionMatrix.php:24    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function execute(int $digit, $oneDimensionMatrix) : bool
+     {
+         $cells = $oneDimensionMatrix->cells();
+-        return $this->findDigitTipInCells($digit, $cells[1], $cells[2], $cells[3]) || $this->findDigitTipInCells($digit, $cells[4], $cells[5], $cells[6]) || $this->findDigitTipInCells($digit, $cells[7], $cells[8], $cells[9]);
++        return $this->findDigitTipInCells($digit, $cells[1], $cells[2], $cells[3]) || $this->findDigitTipInCells($digit, $cells[4], $cells[5], $cells[6]) || $this->findDigitTipInCells($digit, $cells[6], $cells[8], $cells[9]);
+     }
+     /**
+      * @param int $digit
+
+
+114) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/IsDigitTipInOneDimensionMatrix.php:24    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function execute(int $digit, $oneDimensionMatrix) : bool
+     {
+         $cells = $oneDimensionMatrix->cells();
+-        return $this->findDigitTipInCells($digit, $cells[1], $cells[2], $cells[3]) || $this->findDigitTipInCells($digit, $cells[4], $cells[5], $cells[6]) || $this->findDigitTipInCells($digit, $cells[7], $cells[8], $cells[9]);
++        return $this->findDigitTipInCells($digit, $cells[1], $cells[2], $cells[3]) || $this->findDigitTipInCells($digit, $cells[4], $cells[5], $cells[6]) || $this->findDigitTipInCells($digit, $cells[8], $cells[8], $cells[9]);
+     }
+     /**
+      * @param int $digit
+
+
+115) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/IsDigitTipInOneDimensionMatrix.php:33    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+      * @return bool
+      * @throws InvalidPosition
+      */
+-    public function findDigitTipInCells(int $digit, Cell ...$cells) : bool
++    protected function findDigitTipInCells(int $digit, Cell ...$cells) : bool
+     {
+         $count = 0;
+         $positions = [];
+
+
+116) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/IsDigitTipInOneDimensionMatrix.php:50    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+         if ($count < 2) {
+             return false;
+         }
+-        foreach ($cells[0]->square()->cellsAsSingleArray() as $cell) {
++        foreach ($cells[1]->square()->cellsAsSingleArray() as $cell) {
+             try {
+                 if ($cell->findTip($digit)) {
+                     if (!in_array($cell->position(), $positions)) {
+
+
+117) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/IsDigitValidInCell.php:30    [M] LogicalNot
+
+--- Original
++++ New
+@@ @@
+         if (!$cell->isEmpty()) {
+             return false;
+         }
+-        if ($cell->isTied() and !array_search($digit, $cell->ties())) {
++        if ($cell->isTied() and array_search($digit, $cell->ties())) {
+             return false;
+         }
+         if ($cell->row()->findDigit($digit) !== null) {
+
+
+118) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/ValueObject/Result.php:47    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+     public function toArray()
+     {
+         $array = [];
+-        for ($row = 1; $row <= 9; $row++) {
++        for ($row = 0; $row <= 9; $row++) {
+             for ($column = 1; $column <= 9; $column++) {
+                 if ($this->cell($row, $column) !== null) {
+                     if (!isset($array[$row])) {
+
+
+119) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/ValueObject/Result.php:48    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+     {
+         $array = [];
+         for ($row = 1; $row <= 9; $row++) {
+-            for ($column = 1; $column <= 9; $column++) {
++            for ($column = 0; $column <= 9; $column++) {
+                 if ($this->cell($row, $column) !== null) {
+                     if (!isset($array[$row])) {
+                         $array[$row] = [];
+
+
+120) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:43    [M] Coalesce
+
+--- Original
++++ New
+@@ @@
+     {
+         $this->loggerFactory = $loggerFactory ?? new ConsoleLoggerFactory();
+         $this->sudokuFileReader = $sudokuFileReader ?? new SudokuFileReader();
+-        $this->resultFormatter = $resultFormatter ?? new SudokuResultFormatter();
++        $this->resultFormatter = new SudokuResultFormatter();
+         $this->resultPrinter = $resultPrinter ?? new SudokuResultPrinter();
+         parent::__construct($name);
+     }
+
+
+121) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:44    [M] Coalesce
+
+--- Original
++++ New
+@@ @@
+         $this->loggerFactory = $loggerFactory ?? new ConsoleLoggerFactory();
+         $this->sudokuFileReader = $sudokuFileReader ?? new SudokuFileReader();
+         $this->resultFormatter = $resultFormatter ?? new SudokuResultFormatter();
+-        $this->resultPrinter = $resultPrinter ?? new SudokuResultPrinter();
++        $this->resultPrinter = new SudokuResultPrinter();
+         parent::__construct($name);
+     }
+     protected function configure()
+
+
+122) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:50    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+     }
+     protected function configure()
+     {
+-        $this->setName('sudoku:solve')->addArgument('file', InputArgument::REQUIRED, 'file with the sudoku')->addOption('return_steps', 's', InputOption::VALUE_NONE, 'Include steps in the output')->addOption('max_iterations', 'i', InputOption::VALUE_OPTIONAL, 'Max iterations before giving up', SolveSudokuHandler::MAX_ITERATIONS)->setDescription('Solves the sudoku passed as a file as argument');
++        
+     }
+     protected function execute(InputInterface $input, OutputInterface $output)
+     {
+
+
+123) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:77    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+     {
+         try {
+             $this->logger = $this->loggerFactory->getLogger($output);
+-            $this->logger->info('Sudoku started');
++            
+             $data = $this->sudokuFileReader->read($input->getArgument('file'));
+             $returnSteps = (bool) $input->getOption('return_steps');
+             $maxIterations = (int) $input->getOption('max_iterations');
+
+
+124) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:80    [M] CastBool
+
+--- Original
++++ New
+@@ @@
+             $this->logger = $this->loggerFactory->getLogger($output);
+             $this->logger->info('Sudoku started');
+             $data = $this->sudokuFileReader->read($input->getArgument('file'));
+-            $returnSteps = (bool) $input->getOption('return_steps');
++            $returnSteps = $input->getOption('return_steps');
+             $maxIterations = (int) $input->getOption('max_iterations');
+             $payload = new SolveSudokuPayload($data, $maxIterations, $returnSteps);
+             $handler = new SolveSudokuHandler(new StrategiesLoaderHardcoded(), $this->logger);
+
+
+125) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:81    [M] CastInt
+
+--- Original
++++ New
+@@ @@
+             $this->logger->info('Sudoku started');
+             $data = $this->sudokuFileReader->read($input->getArgument('file'));
+             $returnSteps = (bool) $input->getOption('return_steps');
+-            $maxIterations = (int) $input->getOption('max_iterations');
++            $maxIterations = $input->getOption('max_iterations');
+             $payload = new SolveSudokuPayload($data, $maxIterations, $returnSteps);
+             $handler = new SolveSudokuHandler(new StrategiesLoaderHardcoded(), $this->logger);
+             $result = $handler->execute($payload);
+
+
+126) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:86    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+             $payload = new SolveSudokuPayload($data, $maxIterations, $returnSteps);
+             $handler = new SolveSudokuHandler(new StrategiesLoaderHardcoded(), $this->logger);
+             $result = $handler->execute($payload);
+-            $this->resultPrinter->print($output, $this->resultFormatter->format($result, $returnSteps));
++            
+         } catch (NotPossibleToSolve $exception) {
+             $this->logger->error('Not possible to solve sudoku');
+             return -1;
+
+
+127) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Domain/Sudoku/Strategy/StrategiesLoaderHardcoded.php:19    [M] ArrayItemRemoval
+
+--- Original
++++ New
+@@ @@
+     /** @inheritDoc */
+     public function load() : array
+     {
+-        return [new FillLastCellInBoard(), new FillLastCellInRows(), new FillLastCellInColumns(), new FillLastCellInSquares(), new FillLastDigitInBoard(), new FindCellsTiedByTips(), new FillDigitsInSquares()];
++        return [new FillLastCellInRows(), new FillLastCellInColumns(), new FillLastCellInSquares(), new FillLastDigitInBoard(), new FindCellsTiedByTips(), new FillDigitsInSquares()];
+     }
+ }
+
+
+128) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuFileReader.php:50    [M] Throw_
+
+--- Original
++++ New
+@@ @@
+     private function parseJson(array $jsonData) : array
+     {
+         if (!isset($jsonData['board'])) {
+-            throw new IncorrectFormat('tag board not found');
++            new IncorrectFormat('tag board not found');
+         }
+         if (!isset($jsonData['board']['fixedCells'])) {
+             throw new IncorrectFormat('tag board::fixedCells not found');
+
+
+129) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuFileReader.php:69    [M] LogicalNot
+
+--- Original
++++ New
+@@ @@
+             if (!isset($cell['value'])) {
+                 throw new IncorrectFormat('cell without tag value found');
+             }
+-            if (!isset($data[$cell['row']])) {
++            if (isset($data[$cell['row']])) {
+                 $data[$cell['row']] = [];
+             }
+             $data[$cell['row']][$cell['column']] = $cell['value'];
+
+
+130) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuFileReader.php:75    [M] ArrayOneItem
+
+--- Original
++++ New
+@@ @@
+             }
+             $data[$cell['row']][$cell['column']] = $cell['value'];
+         }
+-        return $data;
++        return count($data) > 1 ? array_slice($data, 0, 1, true) : $data;
+     }
+ }
+
+
+131) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:11    [M] ArrayItemRemoval
+
+--- Original
++++ New
+@@ @@
+ {
+     public function format(Result $result, bool $includeSteps) : string
+     {
+-        $formatedResult = ['board' => []];
++        $formatedResult = [];
+         for ($row = 1; $row <= 9; $row++) {
+             for ($column = 1; $column <= 9; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+
+
+132) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:15    [M] LessThanOrEqualToNegotiation
+
+--- Original
++++ New
+@@ @@
+     public function format(Result $result, bool $includeSteps) : string
+     {
+         $formatedResult = ['board' => []];
+-        for ($row = 1; $row <= 9; $row++) {
++        for ($row = 1; $row > 9; $row++) {
+             for ($column = 1; $column <= 9; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+
+
+133) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:15    [M] For_
+
+--- Original
++++ New
+@@ @@
+     public function format(Result $result, bool $includeSteps) : string
+     {
+         $formatedResult = ['board' => []];
+-        for ($row = 1; $row <= 9; $row++) {
++        for ($row = 1; false; $row++) {
+             for ($column = 1; $column <= 9; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+
+
+134) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:15    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function format(Result $result, bool $includeSteps) : string
+     {
+         $formatedResult = ['board' => []];
+-        for ($row = 1; $row <= 9; $row++) {
++        for ($row = 2; $row <= 9; $row++) {
+             for ($column = 1; $column <= 9; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+
+
+135) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:15    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+     public function format(Result $result, bool $includeSteps) : string
+     {
+         $formatedResult = ['board' => []];
+-        for ($row = 1; $row <= 9; $row++) {
++        for ($row = 0; $row <= 9; $row++) {
+             for ($column = 1; $column <= 9; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+
+
+136) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:15    [M] LessThanOrEqualTo
+
+--- Original
++++ New
+@@ @@
+     public function format(Result $result, bool $includeSteps) : string
+     {
+         $formatedResult = ['board' => []];
+-        for ($row = 1; $row <= 9; $row++) {
++        for ($row = 1; $row < 9; $row++) {
+             for ($column = 1; $column <= 9; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+
+
+137) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:16    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     {
+         $formatedResult = ['board' => []];
+         for ($row = 1; $row <= 9; $row++) {
+-            for ($column = 1; $column <= 9; $column++) {
++            for ($column = 2; $column <= 9; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+                 }
+
+
+138) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:16    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+     {
+         $formatedResult = ['board' => []];
+         for ($row = 1; $row <= 9; $row++) {
+-            for ($column = 1; $column <= 9; $column++) {
++            for ($column = 0; $column <= 9; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+                 }
+
+
+139) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:16    [M] LessThanOrEqualTo
+
+--- Original
++++ New
+@@ @@
+     {
+         $formatedResult = ['board' => []];
+         for ($row = 1; $row <= 9; $row++) {
+-            for ($column = 1; $column <= 9; $column++) {
++            for ($column = 1; $column < 9; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+                 }
+
+
+140) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:16    [M] LessThanOrEqualToNegotiation
+
+--- Original
++++ New
+@@ @@
+     {
+         $formatedResult = ['board' => []];
+         for ($row = 1; $row <= 9; $row++) {
+-            for ($column = 1; $column <= 9; $column++) {
++            for ($column = 1; $column > 9; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+                 }
+
+
+141) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:16    [M] For_
+
+--- Original
++++ New
+@@ @@
+     {
+         $formatedResult = ['board' => []];
+         for ($row = 1; $row <= 9; $row++) {
+-            for ($column = 1; $column <= 9; $column++) {
++            for ($column = 1; false; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+                 }
+
+
+142) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:17    [M] NotIdentical
+
+--- Original
++++ New
+@@ @@
+         $formatedResult = ['board' => []];
+         for ($row = 1; $row <= 9; $row++) {
+             for ($column = 1; $column <= 9; $column++) {
+-                if (($value = $result->cell($row, $column)) !== null) {
++                if (($value = $result->cell($row, $column)) === null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+                 }
+             }
+
+
+143) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:18    [M] ArrayItemRemoval
+
+--- Original
++++ New
+@@ @@
+         for ($row = 1; $row <= 9; $row++) {
+             for ($column = 1; $column <= 9; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+-                    $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
++                    $formatedResult['board'][] = ['column' => $column, 'value' => $value];
+                 }
+             }
+         }
+
+
+144) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultPrinter.php:11    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+ {
+     public function print(OutputInterface $output, string $result) : void
+     {
+-        $output->writeln($result);
++        
+     }
+ }
+
+
+Timed Out mutants:
+==================
+
+1) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Application/Handler/SolveSudoku.php:96    [M] Increment
+
+--- Original
++++ New
+@@ @@
+                     continue;
+                 }
+             }
+-            $iterations++;
++            $iterations--;
+         }
+         throw new NotPossibleToSolve();
+     }
+
+
+2) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:112    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+         $this->checkRow($row);
+         $this->checkColumn($col);
+         $this->checkValue($value);
+-        $this->cells[$row][$col]->setContent(new Found($value));
++        
+     }
+     /**
+      * @return Cell[][]
+
+
+3) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/OneDimensionMatrix.php:128    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+      */
+     public function setFound(int $index, int $value) : void
+     {
+-        $this->cells[$index]->setContent(new Found($value));
++        
+     }
+     public function findDigit(int $digit) : ?int
+     {
+
+
+4) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastCellInColumns.php:26    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+                 return $this->fillLastCellInColumn($column);
+             }
+         }
+-        return false;
++        return true;
+     }
+     /**
+      * @param Column $column
+
+
+5) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastCellInRows.php:25    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+                 return $this->fillLastCellInRow($row);
+             }
+         }
+-        return false;
++        return true;
+     }
+ }
+
+
+6) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastCellInSquares.php:25    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+                 return $this->fillLastCellInSquare($square);
+             }
+         }
+-        return false;
++        return true;
+     }
+     /**
+      * @param Square $square
+
+
+7) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastCellInSquares.php:39    [M] Identical
+
+--- Original
++++ New
+@@ @@
+         $missingValues = $square->missingValues();
+         for ($i = 1; $i <= 3; $i++) {
+             for ($j = 1; $j <= 3; $j++) {
+-                if ($square->content($i, $j)->value() === null) {
++                if ($square->content($i, $j)->value() !== null) {
+                     $square->setFound($i, $j, $missingValues[0]);
+                     return true;
+                 }
+
+
+8) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastCellInSquares.php:40    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+         for ($i = 1; $i <= 3; $i++) {
+             for ($j = 1; $j <= 3; $j++) {
+                 if ($square->content($i, $j)->value() === null) {
+-                    $square->setFound($i, $j, $missingValues[0]);
++                    
+                     return true;
+                 }
+             }
+
+
+9) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastDigitInBoard.php:23    [M] Increment
+
+--- Original
++++ New
+@@ @@
+      */
+     public function execute(Board $board) : bool
+     {
+-        for ($i = 1; $i <= 9; $i++) {
++        for ($i = 1; $i <= 9; $i--) {
+             if ($board->countDigit($i) == 8) {
+                 return $this->fillLastDigit($board, $i);
+             }
+
+
+10) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastDigitInBoard.php:28    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+                 return $this->fillLastDigit($board, $i);
+             }
+         }
+-        return false;
++        return true;
+     }
+     /**
+      * @param Board $board
+
+
+11) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastDigitInBoard.php:62    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+         if ($rowNumber === null || $colNumber === null) {
+             return false;
+         }
+-        $board->setFound($rowNumber, $colNumber, $digit);
++        
+         return true;
+     }
+ }
+
+
+12) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Strategy.php:65    [M] Identical
+
+--- Original
++++ New
+@@ @@
+     {
+         $missingValues = $set->missingValues();
+         for ($i = 1; $i <= 9; $i++) {
+-            if ($set->content($i)->value() === null) {
++            if ($set->content($i)->value() !== null) {
+                 $set->setFound($i, $missingValues[0]);
+                 return true;
+             }
+
+
+13) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Strategy.php:66    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+         $missingValues = $set->missingValues();
+         for ($i = 1; $i <= 9; $i++) {
+             if ($set->content($i)->value() === null) {
+-                $set->setFound($i, $missingValues[0]);
++                
+                 return true;
+             }
+         }
+
+
+14) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/ValueObject/Result.php:47    [M] Increment
+
+--- Original
++++ New
+@@ @@
+     public function toArray()
+     {
+         $array = [];
+-        for ($row = 1; $row <= 9; $row++) {
++        for ($row = 1; $row <= 9; $row--) {
+             for ($column = 1; $column <= 9; $column++) {
+                 if ($this->cell($row, $column) !== null) {
+                     if (!isset($array[$row])) {
+
+
+15) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/ValueObject/Result.php:48    [M] Increment
+
+--- Original
++++ New
+@@ @@
+     {
+         $array = [];
+         for ($row = 1; $row <= 9; $row++) {
+-            for ($column = 1; $column <= 9; $column++) {
++            for ($column = 1; $column <= 9; $column--) {
+                 if ($this->cell($row, $column) !== null) {
+                     if (!isset($array[$row])) {
+                         $array[$row] = [];
+
+
+16) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:15    [M] Increment
+
+--- Original
++++ New
+@@ @@
+     public function format(Result $result, bool $includeSteps) : string
+     {
+         $formatedResult = ['board' => []];
+-        for ($row = 1; $row <= 9; $row++) {
++        for ($row = 1; $row <= 9; $row--) {
+             for ($column = 1; $column <= 9; $column++) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+
+
+17) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuResultFormatter.php:16    [M] Increment
+
+--- Original
++++ New
+@@ @@
+     {
+         $formatedResult = ['board' => []];
+         for ($row = 1; $row <= 9; $row++) {
+-            for ($column = 1; $column <= 9; $column++) {
++            for ($column = 1; $column <= 9; $column--) {
+                 if (($value = $result->cell($row, $column)) !== null) {
+                     $formatedResult['board'][] = ['row' => $row, 'column' => $column, 'value' => $value];
+                 }
+
+
+Skipped mutants:
+================
+
+Not Covered mutants:
+====================
+
+1) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Application/Handler/SolveSudoku.php:76    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+         }
+         $strategies = $this->strategiesLoader->load();
+         $this->returnSteps = $game->returnSteps();
+-        Entity::subscribe(function (Event $event) {
+-            $this->recordEvent($event);
+-        });
++        
+         $iterations = 1;
+         while ($iterations <= $game->maxIterations()) {
+             $this->logger()->debug(sprintf('Iteration #%s', $iterations));
+
+
+2) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Application/Handler/SolveSudoku.php:76    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+         $strategies = $this->strategiesLoader->load();
+         $this->returnSteps = $game->returnSteps();
+         Entity::subscribe(function (Event $event) {
+-            $this->recordEvent($event);
++            
+         });
+         $iterations = 1;
+         while ($iterations <= $game->maxIterations()) {
+
+
+3) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Application/Handler/SolveSudoku.php:87    [M] Throw_
+
+--- Original
++++ New
+@@ @@
+                     $this->logger()->debug(sprintf('Strategy %s succeded', get_class($strategy)));
+                     $status = $this->board->status();
+                     if (!$status->isValid()) {
+-                        throw new ReachedInvalidStatus();
++                        new ReachedInvalidStatus();
+                     }
+                     if ($status->isCompleted()) {
+                         return new Result($this->board, $this->events);
+
+
+4) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:145    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+      * @throws InvalidColumnValue
+      * @throws InvalidRowValue
+      */
+-    public function value(int $row, int $col) : ?int
++    protected function value(int $row, int $col) : ?int
+     {
+         $this->checkRow($row);
+         $this->checkColumn($col);
+
+
+5) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:147    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+      */
+     public function value(int $row, int $col) : ?int
+     {
+-        $this->checkRow($row);
++        
+         $this->checkColumn($col);
+         return $this->cells[$row][$col]->value();
+     }
+
+
+6) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:148    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+     public function value(int $row, int $col) : ?int
+     {
+         $this->checkRow($row);
+-        $this->checkColumn($col);
++        
+         return $this->cells[$row][$col]->value();
+     }
+     /**
+
+
+7) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:245    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+         }
+         foreach ($this->columns() as $column) {
+             if (!$column->isCompleted()) {
+-                return false;
++                return true;
+             }
+         }
+         foreach ($this->squares() as $square) {
+
+
+8) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Entity/Board.php:251    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+         }
+         foreach ($this->squares() as $square) {
+             if (!$square->isCompleted()) {
+-                return false;
++                return true;
+             }
+         }
+         return true;
+
+
+9) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillDigitsInSquares.php:34    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+                 return true;
+             }
+         }
+-        return false;
++        return true;
+     }
+     /**
+      * @param Square $square
+
+
+10) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastCellInSquares.php:46    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+                 }
+             }
+         }
+-        return false;
++        return true;
+     }
+ }
+
+
+11) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FillLastDigitInBoard.php:59    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+             }
+         }
+         if ($rowNumber === null || $colNumber === null) {
+-            return false;
++            return true;
+         }
+         $board->setFound($rowNumber, $colNumber, $digit);
+         return true;
+     }
+ }
+
+
+12) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/FindCellsTiedByTips.php:29    [M] TrueValue
+
+--- Original
++++ New
+@@ @@
+     {
+         foreach ($board->squares() as $square) {
+             if ($this->findCellsTiedByTipsInSquare->execute($square)) {
+-                return true;
++                return false;
+             }
+         }
+         return false;
+     }
+ }
+
+
+13) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Strategy.php:15    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+ use App\Domain\Sudoku\Entity\Row;
+ abstract class Strategy extends Entity implements \App\Domain\Sudoku\Strategy\Strategy
+ {
+-    public function countExistingValues(array $values) : int
++    protected function countExistingValues(array $values) : int
+     {
+         return count(array_filter($values, function ($position) {
+             return !is_null($position);
+
+
+14) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Strategy.php:17    [M] LogicalNot
+
+--- Original
++++ New
+@@ @@
+     public function countExistingValues(array $values) : int
+     {
+         return count(array_filter($values, function ($position) {
+-            return !is_null($position);
++            return is_null($position);
+         }));
+     }
+     /**
+
+
+15) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Strategy.php:17    [M] UnwrapArrayFilter
+
+--- Original
++++ New
+@@ @@
+ {
+     public function countExistingValues(array $values) : int
+     {
+-        return count(array_filter($values, function ($position) {
+-            return !is_null($position);
+-        }));
++        return count($values);
+     }
+     /**
+      * @param Row $row
+
+
+16) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Strategy.php:71    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+                 return true;
+             }
+         }
+-        return false;
++        return true;
+     }
+ }
+
+
+17) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FillDigitInSquare.php:59    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+             }
+             return $oldTips != $square->tips();
+         }
+-        return false;
++        return true;
+     }
+ }
+
+
+18) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:33    [M] Continue_
+
+--- Original
++++ New
+@@ @@
+             }
+             foreach ($square->cellsAsSingleArray() as $otherCell) {
+                 if ($otherCell->position() === $position) {
+-                    continue;
++                    break;
+                 }
+                 if ($otherCell->value() !== null) {
+                     continue;
+
+
+19) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/FindCellsTiedByTipsInSquare.php:59    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+                 }
+             }
+         }
+-        return false;
++        return true;
+     }
+     private function findTipsMatches(array $tipsA, array $tipsB) : array
+     {
+
+
+20) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/Strategy/Strategy/Substrategy/IsDigitValidInCell.php:31    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+             return false;
+         }
+         if ($cell->isTied() and !array_search($digit, $cell->ties())) {
+-            return false;
++            return true;
+         }
+         if ($cell->row()->findDigit($digit) !== null) {
+             return false;
+
+
+21) /home/josej/phpstorm/sudoku-breaker/src/Domain/Sudoku/ValueObject/Result.php:38    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+     {
+         return $this->cells[$row][$column] ?? null;
+     }
+-    public function steps() : array
++    protected function steps() : array
+     {
+         return $this->events;
+     }
+
+
+22) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:106    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+             $this->logger->error(sprintf('Incorrect format: %s', $exception->getMessage()));
+             return -6;
+         } catch (Exception $exception) {
+-            $this->logger->error('Unexpected error');
++            
+             $this->logger->debug(sprintf('class: %s - message: %s - file: %s - line: %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
+             $this->logger->debug($exception->getMessage());
+             $this->logger->debug($exception->getTraceAsString());
+
+
+23) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:107    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+             return -6;
+         } catch (Exception $exception) {
+             $this->logger->error('Unexpected error');
+-            $this->logger->debug(sprintf('class: %s - message: %s - file: %s - line: %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
++            
+             $this->logger->debug($exception->getMessage());
+             $this->logger->debug($exception->getTraceAsString());
+             return -7;
+
+
+24) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:116    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+         } catch (Exception $exception) {
+             $this->logger->error('Unexpected error');
+             $this->logger->debug(sprintf('class: %s - message: %s - file: %s - line: %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
+-            $this->logger->debug($exception->getMessage());
++            
+             $this->logger->debug($exception->getTraceAsString());
+             return -7;
+         }
+
+
+25) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:117    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+             $this->logger->error('Unexpected error');
+             $this->logger->debug(sprintf('class: %s - message: %s - file: %s - line: %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
+             $this->logger->debug($exception->getMessage());
+-            $this->logger->debug($exception->getTraceAsString());
++            
+             return -7;
+         }
+         return 0;
+     }
+ }
+
+
+26) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:118    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+             $this->logger->debug(sprintf('class: %s - message: %s - file: %s - line: %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
+             $this->logger->debug($exception->getMessage());
+             $this->logger->debug($exception->getTraceAsString());
+-            return -7;
++            return -6;
+         }
+         return 0;
+     }
+ }
+
+
+27) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:118    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+             $this->logger->debug(sprintf('class: %s - message: %s - file: %s - line: %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
+             $this->logger->debug($exception->getMessage());
+             $this->logger->debug($exception->getTraceAsString());
+-            return -7;
++            return -8;
+         }
+         return 0;
+     }
+ }
+
+
+28) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Command/SolveSudoku.php:118    [M] IntegerNegation
+
+--- Original
++++ New
+@@ @@
+             $this->logger->debug(sprintf('class: %s - message: %s - file: %s - line: %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
+             $this->logger->debug($exception->getMessage());
+             $this->logger->debug($exception->getTraceAsString());
+-            return -7;
++            return 7;
+         }
+         return 0;
+     }
+ }
+
+
+29) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/ConsoleLoggerFactory.php:11    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+ use Symfony\Component\Console\Output\OutputInterface;
+ class ConsoleLoggerFactory
+ {
+-    public function getLogger(OutputInterface $output) : LoggerInterface
++    protected function getLogger(OutputInterface $output) : LoggerInterface
+     {
+         return new ConsoleLogger($output);
+     }
+ }
+
+
+30) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuFileReader.php:37    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      * @param string $fileName
+      * @return false|string
+      */
+-    protected function readFile(string $fileName)
++    private function readFile(string $fileName)
+     {
+         return file_get_contents($fileName);
+     }
+
+
+31) /home/josej/phpstorm/sudoku-breaker/src/Infrastructure/Helper/SudokuFileReader.php:39    [M] FunctionCall
+
+--- Original
++++ New
+@@ @@
+      */
+     protected function readFile(string $fileName)
+     {
+-        return file_get_contents($fileName);
++        file_get_contents($fileName);
++        return null;
+     }
+     /**
+      * @param array $jsonData
