@@ -19,7 +19,8 @@
     "require-dev": {
         "infection/infection": "^0.17.7",
         "phpmd/phpmd": "@stable",
-        "squizlabs/php_codesniffer": "*"
+        "squizlabs/php_codesniffer": "*",
+        "vimeo/psalm": "^3.17"
     },
     "config": {
         "optimize-autoloader": true,
