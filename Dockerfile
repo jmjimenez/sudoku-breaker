@@ -2,7 +2,7 @@
 FROM php:7.4-cli
 
 # Copy composer
-COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN apt-get update
 RUN apt-get install zip unzip -y
